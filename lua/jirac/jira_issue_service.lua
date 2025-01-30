@@ -127,6 +127,23 @@ function M.search_project_issues(params, callback)
     return serialize_issues(perform_jql_search(p))
 end
 
+---@param params GetProjectIssuesParams
+---@return Array<Issue> |nil
+function M.search_open_project_work(params, callback)
+    local p = vim.fn.copy(params)
+    p.jql = "project = " .. params.project_key ..
+    " AND sprint in openSprints()" ..
+    " AND assignee = currentUser()" ..
+    " AND status != Done"
+    if callback then
+        perform_jql_search(p, function (data)
+            callback(serialize_issues(data))
+        end)
+        return nil
+    end
+    return serialize_issues(perform_jql_search(p))
+end
+
 ---@class IssueCountParams
 ---@field project_key string
 ---@field search_phrase string

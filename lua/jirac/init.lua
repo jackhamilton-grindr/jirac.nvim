@@ -4,6 +4,7 @@ local prompt_factory = require("jirac.ui.prompt_factory")
 local JiraWindow = require("jirac.ui.ui").JiraWindow
 local IssuePanel = require("jirac.ui.issue_panel").IssuePanel
 local ProjectPanel = require("jirac.ui.project_panel").ProjectPanel
+local SprintPanel = require("jirac.ui.sprint_panel").SprintPanel
 local IssueSubmitPanel = require("jirac.ui.issue_submit_panel").IssueSubmitPanel
 local RequestErrorPanel = require("jirac.ui.request_error_panel").RequestErrorPanel
 
@@ -80,10 +81,23 @@ local function create_project_panel(project_key)
     })
 end
 
+local function create_sprint_panel(project_key)
+    local window = create_new_window()
+    window:push(SprintPanel:new {
+        project_key = project_key
+    })
+end
+
 local function handle_jirac_project(opts)
     local args = opts.fargs or {}
     local project_key = args[1] or storage.get_config().default_project_key
     wrapped_pcall(create_project_panel, project_key)
+end
+
+local function handle_jirac_sprint(opts)
+    local args = opts.fargs or {}
+    local project_key = args[1] or storage.get_config().default_project_key
+    wrapped_pcall(create_sprint_panel, project_key)
 end
 
 local function create_project_prompt(search_phrase)
@@ -177,6 +191,9 @@ function M.setup(opts)
         nargs = "?"
     })
 
+    vim.api.nvim_create_user_command('JiracSprint', handle_jirac_sprint, {
+        nargs = "?"
+    })
 
     vim.api.nvim_create_user_command('JiracProjectSearch', handle_jirac_project_search, {
         nargs = "?"
