@@ -82,11 +82,11 @@ local block_node_mappers = {
         return string.rep(TAB_STR, n.depth) .. string.rep("#", n.attrs.level)
             .. map_sequential(n)
     end,
-    ["codeBlock"] = function (n)
-        return "'''" .. n.attrs.language .. "\n" ..
-            map_sequential(n)
-        .. "\n'''\n"
-    end,
+    -- ["codeBlock"] = function (n)
+    --     return "'''" .. n.attrs.language .. "\n" ..
+    --         map_sequential(n)
+    --     .. "\n'''\n"
+    -- end,
     ["rule"] = function () return "\n" .. string.rep("-", 50) .. "\n" end,
     ["expand"] = function (n)
         return "..." .. (n.attrs.title or "") .. "\n" .. map_sequential(n) .. "\n"
