@@ -106,7 +106,9 @@ function M.SprintPanel:_build_details_column()
 end
 
 function M.SprintPanel:build_nui_panel()
-    return nui.rows(
+    return nui.rows({
+        border_style = 'rounded',
+    },
     nui.paragraph {
         lines = self.project.key .. " " .. self.project.name,
         align = "center",
