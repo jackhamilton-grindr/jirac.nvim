@@ -1,5 +1,6 @@
 local storage = require("jirac.storage")
 local prompt_factory = require("jirac.ui.prompt_factory")
+local n = require("nui-components")
 
 local JiraWindow = require("jirac.ui.ui").JiraWindow
 local IssuePanel = require("jirac.ui.issue_panel").IssuePanel
@@ -7,6 +8,8 @@ local ProjectPanel = require("jirac.ui.project_panel").ProjectPanel
 local SprintPanel = require("jirac.ui.sprint_panel").SprintPanel
 local IssueSubmitPanel = require("jirac.ui.issue_submit_panel").IssueSubmitPanel
 local RequestErrorPanel = require("jirac.ui.request_error_panel").RequestErrorPanel
+
+local IssuesTable = require("jirac.uiv2.issues_table")
 
 local M = {}
 
@@ -81,10 +84,16 @@ local function create_project_panel(project_key)
     })
 end
 
+local signal = n.create_signal({
+    issues = {},
+})
 local function create_sprint_panel(project_key)
     local window = create_new_window()
-    window:push(SprintPanel:new {
-        project_key = project_key
+    -- window:push(SprintPanel:new {
+    --     project_key = project_key
+    -- })
+    window:push(IssuesTable:new {
+        issues = signal.issues
     })
 end
 
